@@ -1,5 +1,9 @@
 # mmix
+
 mmix in C   
+
+![knuth](knuth.png)   
+
 <pre>
 To generate a simple test program:         
 % echo "48 01 00 01 48 02 00 02 20 03 01 02" > test_program.hex  
