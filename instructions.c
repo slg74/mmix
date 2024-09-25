@@ -22,8 +22,10 @@ void execute_instructions() {
     }
 
     // Set initial values
+    registers[0] = 0;
     registers[1] = 1;
     registers[2] = 2;
+    registers[3] = 0;
 
     // Run the program
     PC = 0;
