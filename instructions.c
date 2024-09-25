@@ -37,10 +37,4 @@ void execute_instructions() {
     for (int i = 0; i < 10; i++) {
         printf("Result in $%d: %llu\n", i, registers[i]);
     }
-    //printf("Result in $1: %llu\n", registers[3]);
-    //printf("Result in $2: %llu\n", registers[3]);
-    //printf("Result in $3: %llu\n", registers[3]);
-    //printf("Result in $4: %llu\n", registers[4]);
-    //printf("Result in $5: %llu\n", registers[5]);
-    //printf("Result in $6: %llu\n", registers[6]);
 }

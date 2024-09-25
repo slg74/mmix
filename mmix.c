@@ -98,16 +98,12 @@ void execute_instruction(uint32_t instruction) {
     }
 }
 
+
 void run() {
     uint32_t max_instructions = 1000;
     uint32_t instruction_count = 0;
 
-    while (instruction_count < max_instructions) {
-        if (PC >= MEM_SIZE) {
-            printf("Program counter out of bounds. Halting execution.\n");
-            break;
-        }
-
+    while (instruction_count < max_instructions && PC < MEM_SIZE) {
         uint32_t instruction = (memory[PC] << 24) |
                                (memory[PC + 1] << 16) |
                                (memory[PC + 2] << 8) |
@@ -121,14 +117,22 @@ void run() {
 
         execute_instruction(instruction);
         instruction_count++;
+
+        // Print register contents after each instruction (for debugging)
+        printf("Registers after instruction %u:\n", instruction_count);
+        for (int i = 0; i < 256; i++) {
+            if (registers[i] != 0) {
+                printf("$%d: %llu\n", i, registers[i]);
+            }
+        }
     }
 
     if (instruction_count >= max_instructions) {
         printf("Reached maximum instruction count. Halting execution.\n");
     }
-
-    printf("Result: %llu\n", registers[3]);
+    printf("Result in register $3: %llu\n", registers[3]);
 }
+
 
 void load_program(const char *filename) {
     FILE *file = fopen(filename, "rb");
