@@ -1,16 +1,10 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
+CFLAGS = -Wall -Wextra -std=c99 -DMMIX_STANDALONE
 
-all: mmix instructions
+all: mmix
 
-mmix: mmix.c mmix.h
-	$(CC) $(CFLAGS) -DMMIX_STANDALONE mmix.c -o mmix
-
-mmix.o: mmix.c mmix.h
-	$(CC) $(CFLAGS) -c mmix.c -o mmix.o
-
-instructions: instructions.c mmix.o mmix.h
-	$(CC) $(CFLAGS) instructions.c mmix.o -o instructions
+mmix: mmix.c instructions.c mmix.h instructions.h
+	$(CC) $(CFLAGS) mmix.c instructions.c -o mmix
 
 clean:
-	rm -f mmix instructions mmix.o
+	rm -f mmix

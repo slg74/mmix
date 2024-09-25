@@ -1,8 +1,10 @@
-
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "instructions.h"
 #include "mmix.h"
 
-int main() {
+void execute_instructions() {
     // Sample MMIX program
     uint32_t program[] = {
         (ADD << 24) | (3 << 16) | (1 << 8) | 2,  // ADD $3, $1, $2
@@ -34,6 +36,4 @@ int main() {
     printf("Result in $4: %llu\n", registers[4]);
     printf("Result in $5: %llu\n", registers[5]);
     printf("Result in $6: %llu\n", registers[6]);
-
-    return 0;
 }
