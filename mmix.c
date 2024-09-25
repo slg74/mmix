@@ -77,7 +77,8 @@ void execute_instruction(uint32_t instruction) {
             registers[ra] = -((int64_t)rb);
             break;
         case 0x48: // SETH
-            registers[ra] = (uint64_t)rb << 48;
+            //registers[ra] = (uint64_t)rb << 48;
+            registers[ra] = (uint64_t)rb & 0xFFFF; // Set only lower 16 bits
             break;
         case 0xF8: // SYNC
             // Synchronize
