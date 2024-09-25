@@ -1,14 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include "mmix.h"
 
-
-uint64_t PC = 0;          
-uint8_t memory[MEM_SIZE];
 uint64_t registers[256];
+uint8_t memory[MEM_SIZE];
+uint64_t PC = 0;
 
-
-// Function to decode and execute a single instruction
 void execute_instruction(uint32_t instruction) {
     uint8_t opcode = (instruction >> 24) & 0xFF;
     uint8_t ra = (instruction >> 16) & 0xFF;
@@ -41,28 +39,40 @@ void execute_instruction(uint32_t instruction) {
         case JMP:
             PC = registers[ra];
             break;
-        case SETH:
-            registers[ra] = (uint64_t)rb << 48;
+        case 0xCF: // RESUME
+            // Implement resume after interrupt logic
             break;
-        case OR:
-            registers[ra] = registers[rb] | registers[rc];
-            break;
-        case ADDU:
+        case 0x07: // FADD
+            // Floating-point addition
+            // Placeholder implementation
             registers[ra] = registers[rb] + registers[rc];
             break;
-        case SUBU:
-            registers[ra] = registers[rb] - registers[rc];
-            break;
-        case MULU:
-            registers[ra] = registers[rb] * registers[rc];
-            break;
-        case DIVU:
+        case 0x03: // FDIV
+            // Floating-point division
+            // Placeholder implementation
             if (registers[rc] != 0) {
                 registers[ra] = registers[rb] / registers[rc];
             } else {
-                printf("Illegal divide by zero.\n"); 
-                break;
+                printf("Error: Floating-point division by zero\n");
             }
+            break;
+        case 0x02: // FCMP
+            // Floating-point comparison
+            // Placeholder implementation
+            registers[ra] = (registers[rb] > registers[rc]) ? 1 : ((registers[rb] < registers[rc]) ? -1 : 0);
+            break;
+        case 0x11: // NEGI
+            // Negate immediate
+            registers[ra] = -((int64_t)rb);
+            break;
+        case 0xF8: // SYNC
+            // Synchronize
+            // Placeholder implementation
+            break;
+        case 0x85: // LDSF
+            // Load short float
+            // Placeholder implementation
+            registers[ra] = *(float*)(memory + registers[rb] + registers[rc]);
             break;
         default:
             printf("Unknown opcode: 0x%02X\n", opcode);
@@ -70,9 +80,8 @@ void execute_instruction(uint32_t instruction) {
     }
 }
 
-// Main loop for fetch-decode-execute cycle
 void run() {
-    uint32_t max_instructions = 1000; // Set maximum number of instructions to execute
+    uint32_t max_instructions = 1000;
     uint32_t instruction_count = 0;
 
     while (instruction_count < max_instructions) {
@@ -101,7 +110,6 @@ void run() {
     }
 }
 
-// Load binary program into memory
 void load_program(const char *filename) {
     FILE *file = fopen(filename, "rb");
     if (!file) {
@@ -119,7 +127,7 @@ int mmix_main(int argc, char *argv[]) {
     }
 
     load_program(argv[1]);
-    run();  // Start the emulation
+    run();
 
     return 0;
 }
