@@ -41,18 +41,6 @@ void execute_instruction(uint32_t instruction) {
         case JMP:
             PC = registers[ra];
             break;
-        case TRAP:
-            // Implement trap instruction
-            break;
-        case FCMP:
-            // Implement floating point compare
-            break;
-        case FDIV:
-            // Implement floating point divide
-            break;
-        case FADD:
-            // Implement floating point add
-            break;
         case SETH:
             registers[ra] = (uint64_t)rb << 48;
             break;
@@ -72,38 +60,9 @@ void execute_instruction(uint32_t instruction) {
             if (registers[rc] != 0) {
                 registers[ra] = registers[rb] / registers[rc];
             } else {
-                // Handle division by zero
+                printf("Illegal divide by zero.\n"); 
+                break;
             }
-            break;
-        case FLOT:
-            // Implement float conversion
-            break;
-        case FREM:
-            // Implement floating point remainder
-            break;
-        case FSQRT:
-            // Implement floating point square root
-            break;
-        case LDSF:
-            // Implement load short float
-            break;
-        case STSF:
-            // Implement store short float
-            break;
-        case PUSHJ:
-            // Implement push and jump
-            break;
-        case UNSAVE:
-            // Implement unsave registers
-            break;
-        case SAVE:
-            // Implement save registers
-            break;
-        case SYNC:
-            // Implement synchronize
-            break;
-        case RESUME:
-            // Implement resume after interrupt
             break;
         default:
             printf("Unknown opcode: 0x%02X\n", opcode);
@@ -113,13 +72,32 @@ void execute_instruction(uint32_t instruction) {
 
 // Main loop for fetch-decode-execute cycle
 void run() {
-    while (1) {
+    uint32_t max_instructions = 1000; // Set maximum number of instructions to execute
+    uint32_t instruction_count = 0;
+
+    while (instruction_count < max_instructions) {
+        if (PC >= MEM_SIZE) {
+            printf("Program counter out of bounds. Halting execution.\n");
+            break;
+        }
+
         uint32_t instruction = (memory[PC] << 24) |
                                (memory[PC + 1] << 16) |
                                (memory[PC + 2] << 8) |
                                memory[PC + 3];
         PC += 4;
+
+        if (instruction == 0) {
+            printf("Reached end of program (null instruction). Halting execution.\n");
+            break;
+        }
+
         execute_instruction(instruction);
+        instruction_count++;
+    }
+
+    if (instruction_count >= max_instructions) {
+        printf("Reached maximum instruction count. Halting execution.\n");
     }
 }
 

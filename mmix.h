@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 
-#define MEM_SIZE 0x100000000  // 4GB of memory
+//#define MEM_SIZE 0x100000000  // 4GB of memory
+#define MEM_SIZE 0x1000  // 4KB of memory
 
 extern uint64_t registers[256];
 extern uint8_t memory[MEM_SIZE];
