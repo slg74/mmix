@@ -1,7 +1,18 @@
+/* 
+// To generate a simple test program:         
+// # echo "48 01 00 01 48 02 00 02 20 03 01 02" > test_program.hex
+// # xxd -r -p test_program.hex test_program
+// 
+// To run:
+// # make && ./mmix test_program
+//
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include "mmix.h"
+#include "instructions.h"
 
 uint64_t registers[256];
 uint8_t memory[MEM_SIZE];
@@ -127,6 +138,7 @@ int mmix_main(int argc, char *argv[]) {
     }
 
     load_program(argv[1]);
+    execute_insturctions();
     run();
 
     return 0;
