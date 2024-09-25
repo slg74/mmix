@@ -88,6 +88,9 @@ void execute_instruction(uint32_t instruction) {
             // Placeholder implementation
             registers[ra] = *(float*)(memory + registers[rb] + registers[rc]);
             break;
+        case 0x0A: // 2ADDU
+            registers[ra] = (registers[rb] + registers[rc]) << 1;
+            break;
         default:
             printf("Unknown opcode: 0x%02X\n", opcode);
             break;
