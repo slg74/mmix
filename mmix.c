@@ -76,6 +76,9 @@ void execute_instruction(uint32_t instruction) {
             // Negate immediate
             registers[ra] = -((int64_t)rb);
             break;
+        case 0x48: // SETH
+            registers[ra] = (uint64_t)rb << 48;
+            break;
         case 0xF8: // SYNC
             // Synchronize
             // Placeholder implementation
@@ -119,6 +122,8 @@ void run() {
     if (instruction_count >= max_instructions) {
         printf("Reached maximum instruction count. Halting execution.\n");
     }
+
+    printf("Result: %llu\n", registers[3]);
 }
 
 void load_program(const char *filename) {
@@ -138,7 +143,7 @@ int mmix_main(int argc, char *argv[]) {
     }
 
     load_program(argv[1]);
-    execute_insturctions();
+    execute_instructions();
     run();
 
     return 0;
